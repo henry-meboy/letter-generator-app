@@ -128,9 +128,6 @@ export default function PrintLetters() {
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
               Please add some student data first to print admission letters.
             </Typography>
-            <Button variant="contained" href="/student">
-              Add Students
-            </Button>
           </CardContent>
         </Card>
       </Container>
@@ -224,18 +221,7 @@ export default function PrintLetters() {
               spacing={2}
               sx={{ minWidth: { xs: '100%', sm: 'auto' } }}
             >
-              <Button
-                variant="outlined"
-                startIcon={<VisibilityIcon />}
-                onClick={() => setPreviewMode(!previewMode)}
-                size={isSmallMobile ? 'small' : 'medium'}
-                sx={{ 
-                  minWidth: { xs: '100%', sm: 'auto' },
-                  py: { xs: 1.5, sm: 1 }
-                }}
-              >
-                {previewMode ? 'Hide Preview' : 'Show Preview'}
-              </Button>
+
               <Button
                 variant="contained"
                 startIcon={isPrinting ? null : <PrintIcon />}
