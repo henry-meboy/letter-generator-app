@@ -1,0 +1,20 @@
+/* src/pages/PrintLetters.css */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .print-wrapper,
+  .print-wrapper *,
+  .letter-container,
+  .letter-container * {
+    visibility: visible !important;
+  }
+  .letter-container {
+    page-break-after: always;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .letter-container:first-of-type {
+    margin-top: 0 !important;
+  }
+}

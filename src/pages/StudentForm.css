@@ -1,0 +1,297 @@
+/* StudentForm.css - Modern Professional Styling */
+.student-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.student-form-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1f2937;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.student-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.student-form-container label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.student-form-container input[type="text"],
+.student-form-container input[type="number"] {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.student-form-container input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.student-form-container input:hover:not(:focus) {
+  border-color: #9ca3af;
+}
+
+/* Name Add Section */
+.name-add {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.name-add input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1f2937;
+  font-size: 0.875rem;
+}
+
+.name-add input:focus {
+  border-color: rgba(255, 255, 255, 0.8);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.name-add input::placeholder {
+  color: #6b7280;
+}
+
+.name-add button {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.name-add button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* Name List */
+.name-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.name-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  background: #ffffff;
+  transition: all 0.2s ease-in-out;
+  gap: 1rem;
+}
+
+.name-list li:last-child {
+  border-bottom: none;
+}
+
+.name-list li:nth-child(even) {
+  background: #f9fafb;
+}
+
+.name-list li:hover {
+  background: #f3f4f6;
+  transform: translateX(4px);
+}
+
+.name-list li span {
+  flex: 1;
+  font-weight: 500;
+  color: #1f2937;
+  font-size: 0.875rem;
+}
+
+.name-list button {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-left: 0.5rem;
+}
+
+.name-list button:first-of-type {
+  background: #0891b2;
+  color: #ffffff;
+  border-color: #0891b2;
+}
+
+.name-list button:first-of-type:hover {
+  background: #0e7490;
+  border-color: #0e7490;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(8, 145, 178, 0.3);
+}
+
+.name-list button:last-of-type {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+.name-list button:last-of-type:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+}
+
+/* Submit Button */
+.student-form-container button[type="submit"] {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-top: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+}
+
+.student-form-container button[type="submit"]:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+}
+
+.student-form-container button[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+}
+
+/* Focus states for accessibility */
+.student-form-container button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Empty state */
+.name-list:empty::before {
+  content: "No students added yet. Add names using the form above.";
+  display: block;
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  background: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .student-form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .student-form-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .name-add {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .name-add button {
+    width: 100%;
+  }
+
+  .name-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .name-list li span {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .name-list button {
+    margin-left: 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .name-list li div {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .name-list li div button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-form-container {
+    padding: 1rem;
+  }
+
+  .student-form-container h2 {
+    font-size: 1.25rem;
+  }
+}
