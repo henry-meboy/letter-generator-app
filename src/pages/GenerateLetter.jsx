@@ -8,9 +8,16 @@ import {
   IconButton,
   Typography,
   GlobalStyles,
-  Divider
+  Divider,
+  useMediaQuery,
+  useTheme,
+  Drawer,
+  AppBar,
+  Toolbar,
+  Button
 } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
+import MenuIcon from '@mui/icons-material/Menu';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { getFromLocalStorage } from '../utils/localStorage';
@@ -20,7 +27,12 @@ export default function GenerateLetter() {
   const [logoUrl, setLogoUrl] = useState(null);
   const [entries, setEntries] = useState([]);
   const [selected, setSelected] = useState('');
+  const [mobileOpen, setMobileOpen] = useState(false);
   const printRef = useRef();
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
 
   // Load data once
   useEffect(() => {
@@ -42,6 +54,7 @@ export default function GenerateLetter() {
   // PDF download: capture full container at its scrollHeight
   const handleDownloadPdf = async (name) => {
     setSelected(name);
+    setMobileOpen(false); // Close mobile drawer
     await new Promise(r => setTimeout(r, 100)); // wait for the letter to rerender
 
     const el = printRef.current;
@@ -109,76 +122,166 @@ export default function GenerateLetter() {
   // Find the selected student entry
   const entry = entries.find(e => e.name === selected);
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  // Sidebar content
+  const sidebarContent = (
+    <>
+      <Typography variant="h6" sx={{ p: 2 }}>Choose & Download</Typography>
+      <Divider />
+      <List dense>
+        {entries.map(e => (
+          <ListItemButton
+            key={e.name}
+            selected={e.name === selected}
+            onClick={() => {
+              setSelected(e.name);
+              if (isMobile) setMobileOpen(false);
+            }}
+          >
+            <ListItemText primary={e.name} />
+            <ListItemSecondaryAction>
+              <IconButton
+                edge="end"
+                onClick={() => handleDownloadPdf(e.name)}
+              >
+                <DownloadIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItemButton>
+        ))}
+      </List>
+    </>
+  );
+
+  const drawerWidth = isMobile ? 280 : isTablet ? 220 : 240;
+
   return (
-    <Box sx={{ display: 'flex', height: '100%' }}>
-      {/* Sidebar */}
-      <Box
-        component="nav"
-        sx={{
-          width: 240,
-          borderRight: 1,
-          borderColor: 'divider',
-          bgcolor: 'background.paper',
-          overflowY: 'auto',
+    <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+      {/* Keep the EXACT SAME GlobalStyles - no changes to letter dimensions */}
+      <GlobalStyles styles={{
+        '@media screen': {
+          '.letter-container': {
+            position: 'relative',
+            width: '21cm',
+            height: '29.7cm',
+            border: '1px dashed #999',
+            boxSizing: 'border-box',
+            margin: '1rem auto',
+            background: '#fafafa',
+          },
+        },
+        '@media print': {
+          'body *': { visibility: 'hidden' },
+          '.letter-container, .letter-container *': { visibility: 'visible' },
+          '.letter-container': {
+            position: 'relative',
+            width: '21cm',
+            height: '29.7cm',
+            pageBreakAfter: 'always',
+            margin: '0 !important',
+            paddingLeft: '1.5cm !important',
+            paddingRight: '1.5cm !important',
+            paddingTop: '40px !important',
+            paddingBottom: '40px !important',
+            boxSizing: 'border-box',
+          },
+          '@page': { size: 'A4', margin: 0 },
+        }
+      }} />
+
+      {/* Mobile App Bar */}
+      {isMobile && (
+        <AppBar
+          position="fixed"
+          sx={{
+            width: '100%',
+            zIndex: theme.zIndex.drawer + 1,
+            bgcolor: 'background.paper',
+            color: 'text.primary',
+            boxShadow: 1,
+          }}
+        >
+          <Toolbar variant="dense">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+              Generate Letter
+            </Typography>
+            {selected && (
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<DownloadIcon />}
+                onClick={() => handleDownloadPdf(selected)}
+                sx={{ ml: 1 }}
+              >
+                Download
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+      )}
+
+      {/* Sidebar - Desktop */}
+      {!isMobile && (
+        <Box
+          component="nav"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            borderRight: 1,
+            borderColor: 'divider',
+            bgcolor: 'background.paper',
+            overflowY: 'auto',
+          }}
+        >
+          {sidebarContent}
+        </Box>
+      )}
+
+      {/* Sidebar - Mobile Drawer */}
+      {isMobile && (
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              mt: 7, // Account for app bar height
+            },
+          }}
+        >
+          {sidebarContent}
+        </Drawer>
+      )}
+
+      {/* Letter preview + capture area - ONLY this container is responsive */}
+      <Box 
+        sx={{ 
+          flexGrow: 1, 
+          overflowY: 'auto', 
+          overflowX: 'auto', // Allow horizontal scroll on small screens
+          p: isMobile ? 1 : isTablet ? 2 : 3,
+          pt: isMobile ? 9 : isTablet ? 2 : 3, // Account for mobile app bar
         }}
       >
-        <Typography variant="h6" sx={{ p: 2 }}>Choose & Download</Typography>
-        <Divider />
-        <List dense>
-          {entries.map(e => (
-            <ListItemButton
-              key={e.name}
-              selected={e.name === selected}
-              onClick={() => setSelected(e.name)}
-            >
-              <ListItemText primary={e.name} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  onClick={() => handleDownloadPdf(e.name)}
-                >
-                  <DownloadIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItemButton>
-          ))}
-        </List>
-      </Box>
-
-      {/* Letter preview + capture area */}
-      <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 3 }}>
-        <GlobalStyles styles={{
-          '@media screen': {
-            '.letter-container': {
-              position: 'relative',
-              width: '21cm',
-              height: '29.7cm',
-              border: '1px dashed #999',
-              boxSizing: 'border-box',
-              margin: '1rem auto',
-              background: '#fafafa',
-            },
-          },
-          '@media print': {
-            'body *': { visibility: 'hidden' },
-            '.letter-container, .letter-container *': { visibility: 'visible' },
-            '.letter-container': {
-              position: 'relative',
-              width: '21cm',
-              height: '29.7cm',
-              pageBreakAfter: 'always',
-              margin: '0 !important',
-              paddingLeft: '1.5cm !important',
-              paddingRight: '1.5cm !important',
-              paddingTop: '40px !important',
-              paddingBottom: '40px !important',
-              boxSizing: 'border-box',
-            },
-            '@page': { size: 'A4', margin: 0 },
-          }
-        }} />
-
         {entry && (
+          // The letter itself remains EXACTLY the same - no responsive changes
           <Box
             ref={printRef}
             className="letter-container"
@@ -190,7 +293,7 @@ export default function GenerateLetter() {
               color: '#000',
             }}
           >
-            {/* Top SVG */}
+            {/* Top SVG - unchanged */}
             <Box
               component="svg"
               width="947"
@@ -217,7 +320,7 @@ export default function GenerateLetter() {
               </defs>
             </Box>
 
-            {/* Header */}
+            {/* Header - unchanged */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 0.5 }}>
               {logoUrl && (
                 <Box component="img" src={logoUrl} alt="Logo" sx={{ width: 140, height: 'auto', mr: 0.5 }} />
@@ -248,12 +351,12 @@ export default function GenerateLetter() {
               </Box>
             </Box>
 
-            {/* Date */}
+            {/* Date - unchanged */}
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4, mb: 2 }}>
               <Typography variant="body1" sx={{ fontWeight: 700 }}>{formattedDate}</Typography>
             </Box>
 
-            {/* Body */}
+            {/* Body - unchanged */}
             <Box sx={{ mt: 4, textAlign: 'left' }}>
               <Typography variant="h6" sx={{ mb: 5 }}>Dear {entry.name},</Typography>
               <Typography variant="h6" sx={{ mb: 6 }}>OFFER OF PROVISIONAL ADMISSION</Typography>
@@ -272,7 +375,7 @@ export default function GenerateLetter() {
               <Typography paragraph sx={{ mb: 2 }}>Congratulations on your brilliant performance as I wish you a happy stay in ECCOWAS academic community.</Typography>
             </Box>
 
-            {/* Signature */}
+            {/* Signature - unchanged */}
             <Box sx={{ mt: 9, textAlign: 'left' }}>
               <Typography variant="body1" sx={{ fontStyle: 'italic', mb: 0.3 }}>Registrar</Typography>
               {school.signature ? (
@@ -284,7 +387,7 @@ export default function GenerateLetter() {
               )}
             </Box>
 
-            {/* Bottom SVG */}
+            {/* Bottom SVG - unchanged */}
             <Box
               component="svg"
               width="947"
